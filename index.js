@@ -37,12 +37,16 @@ app.get("/random", async (req, res) => {
 
 let state;
 let page;
+let perPage;
+let typeBrew;
 
 app.post("/submit", async (req, res) => {
   console.log(req.body);
     page = 1;
     state = req.body.state;
-    const response = await axios.get(API_URL + "?by_state=" + state + "&per_page=15");
+    perPage = req.body.perPage;
+    typeBrew = req.body.typeBrew;
+    const response = await axios.get(API_URL + "?by_state=" + state + "&per_page=" + perPage + "&by_type=" + typeBrew);
     // console.log(response);
     const result = response.data;
     console.log(result.length);
@@ -52,10 +56,20 @@ app.post("/submit", async (req, res) => {
         // });
 });
 
+app.post("/submit3", async (req, res) => {
+  console.log(req.body);
+    page = 1;
+    perPage = req.body.perPage;
+    const response = await axios.get(API_URL + "?by_state=" + state + "&per_page=" + perPage);
+    // console.log(response);
+    const result = response.data;
+    res.render("brewList.ejs", { stateChoice: state, brewByState: result });
+});
+
 // next page button here
   app.get("/butt", async (req, res) => {
     page++;
-    const response = await axios.get(API_URL + "?by_state=" + state + "&per_page=15&page=" + page);
+    const response = await axios.get(API_URL + "?by_state=" + state + "&per_page=" + perPage + "&page=" + page + "&by_type=" + typeBrew);
     const result = response.data;
     console.log(result.length);
     console.log(page);
@@ -69,7 +83,7 @@ app.post("/submit", async (req, res) => {
   // previous page button here
   app.get("/submit2", async (req, res) => {
       page--;
-      const response = await axios.get(API_URL + "?by_state=" + state + "&per_page=15&page=" + page);
+      const response = await axios.get(API_URL + "?by_state=" + state + "&per_page=" + perPage + "&page=" + page + "&by_type=" + typeBrew);
       const result = response.data;
       console.log(page);
       // if (result.length == 0) {
@@ -88,11 +102,6 @@ app.post("/submit", async (req, res) => {
   //   }
   // };
   // });
-
-// const btn = document.getElementById('test');
-//     btn.addEventListener('click', function handleClick() {
-//     btn.textContent = 'Button clicked';
-//     });
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
