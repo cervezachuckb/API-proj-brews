@@ -90,6 +90,17 @@
 </head>
 
 <body>
+    <form action="/submit3" id="form" class="form" method="POST">
+        <label for="idInput">Number of breweries per page:</label>
+        <select name="perPage" class="form-select" onchange="this.form.submit()">
+          <option value="select">select</option>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+        </select>
+    </form>
+    
     <div class="response-area">
       <% if (locals.stateChoice) { %>
         <h2> List of breweries in <%= stateChoice %> ... </h2>
